@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class StudentAbsenceTrackerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(StudentAbsenceTrackerApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(StudentAbsenceTrackerApplication.class, args);
+    }
 
 }
