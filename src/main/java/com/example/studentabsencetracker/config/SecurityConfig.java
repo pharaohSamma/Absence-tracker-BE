@@ -2,7 +2,7 @@ package com.example.studentabsencetracker.config;
 
 import com.example.studentabsencetracker.security.jwt.JwtAuthEntryPoint;
 import com.example.studentabsencetracker.security.jwt.JwtAuthenticationFilter;
-import com.example.studentabsencetracker.security.service.UserDetailsServiceImpl;
+import com.example.studentabsencetracker.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +23,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -35,7 +34,6 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthEntryPoint unauthorizedHandler;
 
-
     @Bean
     public JwtAuthenticationFilter authenticationJwtTokenFilter() {
         return new JwtAuthenticationFilter();
@@ -44,10 +42,8 @@ public class SecurityConfig {
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
-
         return authProvider;
     }
 
@@ -61,21 +57,29 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // In SecurityConfig.java
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors() // <-- ADD THIS LINE
+                .cors()
                 .and()
                 .csrf(csrf -> csrf.disable())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Auth endpoints
+                        // Auth endpoints - always allow
                         .requestMatchers("/auth/**").permitAll()
-                        // Temporarily allow access to /users/me for testing
+                        // Test endpoints - temporarily allow
+                        .requestMatchers("/test", "/api/test").permitAll()
+                        .requestMatchers("/justifications/test").permitAll()
+                        // Justifications endpoints - require authentication but allow all roles for now
+                        .requestMatchers("/api/justifications/**").authenticated()
+                        // Users endpoint
                         .requestMatchers("/users/me").permitAll()
-                        // Other endpoints still require authentication
+                        // All other API endpoints require authentication
+                        .requestMatchers("/api/**").authenticated()
+                        // Static resources
+                        .requestMatchers("/static/**", "/css/**", "/js/**", "/images/**").permitAll()
+                        // Everything else requires authentication
                         .anyRequest().authenticated()
                 );
 
@@ -84,6 +88,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

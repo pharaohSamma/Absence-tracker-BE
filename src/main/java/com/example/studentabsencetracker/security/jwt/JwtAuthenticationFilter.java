@@ -1,6 +1,6 @@
 package com.example.studentabsencetracker.security.jwt;
 
-import com.example.studentabsencetracker.security.service.UserDetailsServiceImpl;
+import com.example.studentabsencetracker.service.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

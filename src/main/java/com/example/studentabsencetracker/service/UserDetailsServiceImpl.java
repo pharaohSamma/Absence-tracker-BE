@@ -1,4 +1,4 @@
-package com.example.studentabsencetracker.security.service;
+package com.example.studentabsencetracker.service;
 
 import com.example.studentabsencetracker.model.entity.User;
 import com.example.studentabsencetracker.repository.UserRepository;

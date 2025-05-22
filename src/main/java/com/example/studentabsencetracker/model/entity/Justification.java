@@ -14,11 +14,12 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "justifications")
 public class Justification {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "absence_id", nullable = false)
     private Absence absence;
 
@@ -26,15 +27,15 @@ public class Justification {
     @JoinColumn(name = "submitted_by", nullable = false)
     private User submittedBy;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private JustificationStatus status = JustificationStatus.PENDING;
-
-    @Column(nullable = false)
+    @Column(name = "description", nullable = false)
     private String description;
 
     @Column(name = "document_url")
     private String documentUrl;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private JustificationStatus status = JustificationStatus.PENDING;
 
     @ManyToOne
     @JoinColumn(name = "reviewed_by")

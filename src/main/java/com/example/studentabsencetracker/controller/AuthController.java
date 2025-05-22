@@ -27,4 +27,8 @@ public class AuthController {
         UserResponse userResponse = authService.registerUser(signupRequest);
         return ResponseEntity.ok(userResponse);
     }
+
+
+
 }
+
